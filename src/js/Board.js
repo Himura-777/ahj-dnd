@@ -1,9 +1,9 @@
-import Column from './Column.js';
-import Storage from './Storage.js';
-import Card from './Card.js';
+import Column from './Column.js'
+import Storage from './Storage.js'
+import Card from './Card.js'
 
 export default class Board {
-  constructor () {
+  constructor() {
     this.columns = [
       new Column('TODO', 'todo', Storage.getCards('todo')),
       new Column('IN PROGRESS', 'in-progress', Storage.getCards('in-progress')),
@@ -11,24 +11,36 @@ export default class Board {
     ];
   }
 
-  render () {
+  render() {
     const board = document.createElement('div');
     board.className = 'board';
 
     this.columns.forEach(column => {
-      board.appendChild(column.createElement());
+      board.append(column.createElement());
     });
 
-    document.body.appendChild(board);
+    document.getElementById('app').append(board);
     this.setupEventListeners();
   }
 
-  setupEventListeners () {
+  setupEventListeners() {
     document.addEventListener('click', (e) => {
       if (e.target.classList.contains('card-delete')) {
         this.deleteCard(e.target.closest('.card'));
-      } else if (e.target.classList.contains('add-card')) {
-        this.addCardPrompt(e.target.closest('.column'));
+      } else if (e.target.classList.contains('add-card-btn')) {
+        this.showAddCardForm(e.target);
+      } else if (e.target.classList.contains('submit-card-btn')) {
+        this.addCard(e.target.closest('.column'));
+      } else if (e.target.classList.contains('cancel-card-btn')) {
+        this.hideAddCardForm(e.target.closest('.column'));
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (e.target.classList.contains('card-delete')) {
+        this.deleteCard(e.target.closest('.card'));
+      } else if (e.target.classList.contains('add-card-btn')) {
+        this.addCard(e.target.closest('.column'));
       }
     });
 
@@ -36,12 +48,14 @@ export default class Board {
       if (e.target.classList.contains('card')) {
         e.target.classList.add('dragging');
         e.dataTransfer.setData('text/plain', e.target.dataset.id);
+        e.target.style.transform = 'rotate(3deg)';
       }
     });
 
     document.addEventListener('dragend', (e) => {
       if (e.target.classList.contains('card')) {
         e.target.classList.remove('dragging');
+        e.target.style.transform = '';
       }
     });
 
@@ -52,7 +66,7 @@ export default class Board {
         const draggable = document.querySelector('.dragging');
 
         if (afterElement == null) {
-          e.target.closest('.column').querySelector('.cards-container').appendChild(draggable);
+          e.target.closest('.column').querySelector('.cards-container').append(draggable);
         } else {
           e.target.closest('.column').querySelector('.cards-container').insertBefore(draggable, afterElement);
         }
@@ -71,7 +85,34 @@ export default class Board {
     });
   }
 
-  getDragAfterElement (column, y) {
+  showAddCardForm(button) {
+    const column = button.closest('.column');
+    button.style.display = 'none';
+    column.querySelector('.add-card-form').style.display = 'block';
+    column.querySelector('.new-card-text').focus();
+  }
+
+  hideAddCardForm(column) {
+    column.querySelector('.add-card-btn').style.display = 'block';
+    column.querySelector('.add-card-form').style.display = 'none';
+    column.querySelector('.new-card-text').value = '';
+  }
+
+  addCard(columnElement) {
+    const textarea = columnElement.querySelector('.new-card-text');
+    const text = textarea.value.trim();
+
+    if (text) {
+      const columnId = columnElement.dataset.id;
+      const card = new Card(text);
+
+      Storage.addCard(columnId, card);
+      columnElement.querySelector('.cards-container').append(card.createElement());
+      this.hideAddCardForm(columnElement);
+    }
+  }
+
+  getDragAfterElement(column, y) {
     const cards = [...column.querySelectorAll('.card:not(.dragging)')];
 
     return cards.reduce((closest, child) => {
@@ -86,20 +127,23 @@ export default class Board {
     }, { offset: Number.NEGATIVE_INFINITY }).element;
   }
 
-  deleteCard (cardElement) {
+  deleteCard(cardElement) {
     const cardId = cardElement.dataset.id;
     Storage.deleteCard(cardId);
     cardElement.remove();
   }
 
-  addCardPrompt (columnElement) {
-    const text = prompt('Enter card text:');
+  addCard(columnElement) {
+    const textarea = columnElement.querySelector('.new-card-text');
+    const text = textarea.value.trim();
+
     if (text) {
       const columnId = columnElement.dataset.id;
       const card = new Card(text);
 
       Storage.addCard(columnId, card);
-      columnElement.querySelector('.cards-container').appendChild(card.createElement());
+      columnElement.querySelector('.cards-container').append(card.createElement());
+      textarea.value = '';
     }
   }
 }

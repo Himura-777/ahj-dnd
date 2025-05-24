@@ -12,7 +12,7 @@ body {
 
 .board {
     display: flex;
-    gap: 10px;
+    gap: 20px;
     min-height: 100vh;
 }
 
@@ -23,12 +23,19 @@ body {
     padding: 10px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 15px;
 }
 
 .column-title {
     font-weight: bold;
     padding: 10px;
+    color: #172b4d;
+}
+
+.cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .card {
@@ -38,6 +45,12 @@ body {
     box-shadow: 0 1px 0 rgba(9, 30, 66, 0.25);
     cursor: grab;
     position: relative;
+    transition: transform 0.1s ease;
+}
+
+.card-content {
+    padding-right: 20px;
+    word-wrap: break-word;
 }
 
 .card:hover .card-delete {
@@ -47,32 +60,107 @@ body {
 .card-delete {
     position: absolute;
     right: 5px;
-    top: 1px;
+    top: 5px;
     cursor: pointer;
     display: none;
-    font-size: 20px;
-    line-height: 1;
+    font-size: 18px;
     color: #6b778c;
-}
-
-.card-placeholder {
-    background-color: rgba(0, 0, 0, 0.1);
-    border-radius: 3px;
-    height: 50px;
-}
-
-.add-card {
-    color: #5e6c84;
-    padding: 10px;
-    cursor: pointer;
-}
-
-.add-card:hover {
-    background-color: rgba(9, 30, 66, 0.08);
-    border-radius: 3px;
+    background: none;
+    border: none;
 }
 
 .card.dragging {
-    opacity: 0.5;
+    opacity: 0.8;
     transform: rotate(3deg);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.add-card-container {
+    margin-top: auto;
+}
+
+.add-card-btn {
+    background: none;
+    border: none;
+    color: #5e6c84;
+    padding: 8px;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 14px;
+}
+
+.add-card-btn:hover {
+    background-color: rgba(9, 30, 66, 0.08);
+    color: #172b4d;
+}
+
+.add-card-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.add-card-form.hidden {
+    display: none;
+}
+
+.new-card-text {
+    border: none;
+    border-radius: 3px;
+    padding: 8px;
+    resize: none;
+    min-height: 60px;
+    box-shadow: 0 1px 0 rgba(9, 30, 66, 0.25);
+    font-size: 14px;
+}
+
+.new-card-text:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #0079bf;
+}
+
+.form-buttons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.submit-card-btn {
+    background-color: #0079bf;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.submit-card-btn:hover {
+    background-color: #026aa7;
+}
+
+.cancel-card-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #6b778c;
+    padding: 0;
+    line-height: 1;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Placeholder for drag and drop */
+.card-placeholder {
+    background-color: rgba(0, 0, 0, 0.05);
+    border: 2px dashed #ccc;
+    border-radius: 3px;
+    height: 40px;
+    margin-bottom: 10px;
 }

@@ -6,11 +6,12 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
-    clean: true
+    clean: true,
+    publicPath: '/'
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/index.html'
+      template: './src/index.html',
     })
   ],
   module: {
@@ -20,7 +21,7 @@ module.exports = {
         use: ['style-loader', 'css-loader']
       },
       {
-        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        test: /\.(png|svg|jpg|jpeg|gif|ico)$/i,
         type: 'asset/resource'
       }
     ]
@@ -31,6 +32,7 @@ module.exports = {
     },
     compress: true,
     port: 9000,
-    hot: true
+    hot: true,
+    historyApiFallback: true
   }
 };

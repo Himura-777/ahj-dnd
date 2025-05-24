@@ -1,10 +1,10 @@
 export default class Card {
-  constructor (text, id) {
-    this.text = text;
+  constructor(text, id) {
+    this.text = text.trim();
     this.id = id || Date.now().toString();
   }
 
-  createElement () {
+  createElement() {
     const card = document.createElement('div');
     card.className = 'card';
     card.dataset.id = this.id;
@@ -14,8 +14,8 @@ export default class Card {
     deleteBtn.className = 'card-delete';
     deleteBtn.innerHTML = '&times;';
 
-    card.innerHTML = this.text;
-    card.appendChild(deleteBtn);
+    card.innerHTML = `<div class="card-content">${this.text}</div>`;
+    card.append(deleteBtn);
 
     return card;
   }
