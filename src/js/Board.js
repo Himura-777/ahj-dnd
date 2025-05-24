@@ -132,18 +132,4 @@ export default class Board {
     Storage.deleteCard(cardId);
     cardElement.remove();
   }
-
-  addCard(columnElement) {
-    const textarea = columnElement.querySelector('.new-card-text');
-    const text = textarea.value.trim();
-
-    if (text) {
-      const columnId = columnElement.dataset.id;
-      const card = new Card(text);
-
-      Storage.addCard(columnId, card);
-      columnElement.querySelector('.cards-container').append(card.createElement());
-      textarea.value = '';
-    }
-  }
 }
