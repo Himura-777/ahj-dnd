@@ -10,10 +10,9 @@ export default class Card {
     card.dataset.id = this.id;
     card.draggable = true;
 
-    const deleteBtn = document.createElement('img');
+    const deleteBtn = document.createElement('span');
     deleteBtn.className = 'card-delete';
-    deleteBtn.src = './assets/icons/close.svg';
-    deleteBtn.alt = 'Delete';
+    deleteBtn.innerHTML = '&times;';
 
     card.innerHTML = this.text;
     card.appendChild(deleteBtn);
